@@ -1,0 +1,73 @@
+﻿<Page
+    x:Class="OnnxAi.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OnnxAi"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+        IsRightTapEnabled="False">
+
+        <StackPanel Margin="25">
+            
+            <!--Exam information-->
+            <TextBlock Name="ExamIntro"
+                       TextWrapping="WrapWholeWords"
+                       FontStyle="Normal"
+                       FontWeight="SemiBold"
+                       FontSize="20"
+                       TextAlignment="Center"
+                       Text="Esame Intelligenza Artificiale - Prof. Remo Pareschi - Univeristà del Molise"
+                       Foreground="DodgerBlue">
+            </TextBlock>
+            <TextBlock Name="CandidateIntro"
+                       TextWrapping="WrapWholeWords"
+                       FontStyle="Normal"
+                       FontWeight="Normal"
+                       FontSize="20"
+                       TextAlignment="Center"
+                       Text="Angelo Gino Varrati - 160003 @Informatica"
+                       Foreground="DodgerBlue"
+                       Margin="10">
+            </TextBlock>
+            <Image
+                Source="Assets/Unimol.png"
+                Width="250"
+                Margin="10">
+            </Image>
+            
+            <!--Image picker-->
+            <Button Name="ButtonRun"
+                    ToolTipService.ToolTip="Carica l'immagine"
+                    Width="80"
+                    Height="80"
+                    Click="ButtonRun_Click" 
+                    IsEnabled="True" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Top">
+                <Button.Content>
+                    <SymbolIcon Symbol="Upload" />
+                </Button.Content>
+            </Button>
+
+            <!--Result and status text block-->
+            <TextBlock x:Name="StatusBlock" 
+                       FontWeight="Bold" 
+                       TextWrapping="Wrap"  
+                       Text="Clicca sul bottone per caricare l'immagine da far valutare al modello ONNX!"
+                       Margin="10"/>
+
+            <!--Image preview -->
+            <Image
+                Name="UIPreviewImage"
+                Stretch="Uniform"
+                MaxWidth="300"
+                MaxHeight="300"
+                Margin="10"/>
+        </StackPanel>
+
+    </Grid>
+</Page>
