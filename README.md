@@ -10,7 +10,7 @@ Angelo Gino Varrati [@angelus_gi](https://github.com/angelus_gi)
 I've produced an app using UWP (.NET Core) to use an ONNX Model exported from Azure Custom Vision to recognise artwork from different authors: Picasso, Rembrandt and Pollock.
 <br/>
 
-## Tools and platform
+## Tools and platforms
 - [Azure Custom Vision](https://www.customvision.ai/) - Azure Custom Vision
 - [Universal Windows Platform](https://docs.microsoft.com/it-it/windows/uwp/get-started/universal-application-platform-guide) - Universal Windows Platform
 - [ONNX](https://onnx.ai/get-started.html) - ONNX Open Neural Network Exchenge
