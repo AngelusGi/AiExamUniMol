@@ -19,3 +19,6 @@ I've produced an app using UWP (.NET Core) to use an ONNX Model exported from Az
 ## Features in version 1
 - File picker to get images in input from the user
 <br/>
+
+## Additional notes
+Project inspired by: https://github.com/Azure-Samples/cognitive-services-onnx-customvision-sample
