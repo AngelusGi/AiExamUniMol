@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-# AiExamUniMol
-
-Exam project "Artificial Intelligence" bachelor deegree in Computer Science at UniMol (University of Molise)
-Professor Remo Pareschi
-
-Inspired by: https://github.com/Azure-Samples/cognitive-services-onnx-customvision-sample
-=======
 # Artificial Intelligence - Exam
 Exam project "Artificial Intelligence" - Professor Remo Pareschi (UniMol - University of Molise)
 <br/>
@@ -27,4 +19,3 @@ I've produced an app using UWP (.NET Core) to use an ONNX Model exported from Az
 ## Features in version 1
 - File picker to get images in input from the user
 <br/>
->>>>>>> 12d5bbc43a42277fb52dc2c1702350aba6761c86
