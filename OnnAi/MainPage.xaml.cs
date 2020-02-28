@@ -24,44 +24,60 @@ namespace OnnxAi
         private Stopwatch _stopwatch = new Stopwatch();
         private OnnxModel _model = null;
         //private const string _onnxFileName = "ArtModel_R4.onnx";
-        private const string _onnxFileName = "ArtModel_R6.onnx";
+        private const string OnnxFileName = "ArtModel_R6.onnx";
 
 
         public sealed class OnnxModelInput
         {
-            public VideoFrame data { get; set; }
+            public VideoFrame Data { get; set; }
         }
 
         public sealed class OnnxModelOutput
         {
-            public IReadOnlyList<string> classLabel { get; set; }
-            public IDictionary<string, float> loss { get; set; }
+            public IReadOnlyList<string> ClassLabel { get; set; }
+            public IDictionary<string, float> Loss { get; set; }
         }
 
         public sealed class OnnxModel
         {
-            private LearningModel learningModel;
-            private LearningModelSession session;
-            private LearningModelBinding binding;
+            private LearningModel _learningModel;
+            private LearningModelSession _session;
+            private LearningModelBinding _binding;
 
             public static async Task<OnnxModel> CreateFromStreamAsync(IRandomAccessStreamReference stream)
             {
-                OnnxModel onnxModel = new OnnxModel();
-                onnxModel.learningModel = await LearningModel.LoadFromStreamAsync(stream);
-                onnxModel.session = new LearningModelSession(onnxModel.learningModel);
-                onnxModel.binding = new LearningModelBinding(onnxModel.session);
+                var onnxModel = new OnnxModel();
+                onnxModel._learningModel = await LearningModel.LoadFromStreamAsync(stream);
+                onnxModel._session = new LearningModelSession(onnxModel._learningModel);
+                onnxModel._binding = new LearningModelBinding(onnxModel._session);
                 return onnxModel;
             }
 
             public async Task<OnnxModelOutput> EvaluateAsync(OnnxModelInput input)
             {
-                binding.Bind("data", input.data);
-                var result = await session.EvaluateAsync(binding, string.Empty);
+                _binding.Bind("data", input.Data);
+                var result = await _session.EvaluateAsync(_binding, string.Empty);
 
-                OnnxModelOutput output = new OnnxModelOutput();
-                output.classLabel = (result.Outputs["classLabel"] as TensorString).GetAsVectorView();
-                var predictions = result.Outputs["loss"] as IList<IDictionary<string, float>>;
-                output.loss = predictions[0];
+                var output = new OnnxModelOutput();
+
+                try
+                {
+                    output.ClassLabel = (result.Outputs["classLabel"] as TensorString).GetAsVectorView();
+                    var predictions = result.Outputs["loss"] as IList<IDictionary<string, float>>;
+                    output.Loss = predictions[0];
+
+                }
+                catch (NullReferenceException nullReferenceException)
+                {
+                    Console.WriteLine(
+                        $"Date: {nullReferenceException.Data} \t\nMessage:{nullReferenceException.Message}");
+                    throw;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(
+                        $"Date: {exception.Data} \t\nMessage:{exception.Message}");
+                }
 
                 return output;
             }
@@ -74,17 +90,17 @@ namespace OnnxAi
 
         private async Task LoadModelAsync()
         {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => StatusBlock.Text = $"Caricamento di {_onnxFileName} in corso, attendere...");
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => StatusBlock.Text = $"Caricamento di {OnnxFileName} in corso, attendere...");
 
             try
             {
                 _stopwatch = Stopwatch.StartNew();
 
-                var modelFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///Assets/{_onnxFileName}"));
+                var modelFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri($"ms-appx:///Assets/{OnnxFileName}"));
                 _model = await OnnxModel.CreateFromStreamAsync(modelFile);
 
                 _stopwatch.Stop();
-                Debug.WriteLine($"{_onnxFileName} caricato. Tempo trascorso: {_stopwatch.ElapsedMilliseconds} ms");
+                Debug.WriteLine($"{OnnxFileName} caricato. Tempo trascorso: {_stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception ex)
             {
@@ -160,10 +176,10 @@ namespace OnnxAi
                 {
                     _stopwatch.Restart();
                     OnnxModelInput inputData = new OnnxModelInput();
-                    inputData.data = frame;
+                    inputData.Data = frame;
                     var results = await _model.EvaluateAsync(inputData);
-                    var loss = results.loss.ToList().OrderBy(x=>-(x.Value));
-                    var labels = results.classLabel;
+                    var loss = results.Loss.ToList().OrderBy(x=>-(x.Value));
+                    var labels = results.ClassLabel;
                     _stopwatch.Stop();
 
                     var lossStr = string.Join(",  ", loss.Select(l => l.Key + " " + (l.Value * 100.0f).ToString("#0.00") + "%"));
